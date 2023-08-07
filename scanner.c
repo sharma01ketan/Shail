@@ -114,7 +114,7 @@ struct token_s *tokenize(struct source_s *src){
         if(endloop){
             break;
         }
-    } while( (nc==next_char(src)) != EOF );
+    } while( (nc=next_char(src)) != EOF );
 
     if(tok_bufindex == 0){
         return &eof_token;

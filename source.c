@@ -37,7 +37,6 @@ char next_char(struct source_s *src){
 
 
 //like next_char, but does not update the source pointer
-//
 char peek_char(struct source_s *src){
     if(!src || !src->buffer){
         errno = ENODATA;

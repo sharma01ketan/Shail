@@ -37,6 +37,7 @@ char *read_cmd(void){
         
         if(!ptr){
             ptr = malloc(buflen + 1);// for the first chunk we using buflen
+            //additional byte for the null terminator
         }
         else{
             char *ptr2 = realloc(ptr,ptrlen+buflen+1);//for subsequent chunks we use realloc
@@ -51,8 +52,15 @@ char *read_cmd(void){
             fprintf(stderr, "error: failed to alloc buffer: %s\n", strerror(errno));
             return NULL;
         }
+
+// ptr is a pointer that points to the dynamically allocated memory where the user's input is being stored.
+// ptrlen is an integer variable that keeps track of the length of the input that has already been stored in the ptr buffer.
+// buf is an array that holds the most recent input read from the user.
+
         strcpy(ptr+ptrlen,buf);
-        if(buf[buflen-1] == '\n'){
+        if(buf[buflen-1] == '\n'){//agar toh mere user ne enter dabaya hai
+            //len 1 means line character hai & last mein \ shows ki agli line bhi io hai, iske NOT check kra hamne
+            //if both conditions are met means ki input itna hee tha, return kardo
             if(buflen==1||buf[buflen-2]!='\\'){
                 return ptr;
             }
