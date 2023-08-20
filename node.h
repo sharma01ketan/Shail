@@ -2,12 +2,12 @@
 #define NODE_H
 
 enum node_type_e{
-    NODE_COMMAND,
-    NODE_VAR,
+    NODE_COMMAND,//command wala node pehla hota hai
+    NODE_VAR,//uske baad ke node var ke hote hain
 };
 
 enum val_type_e{
-
+    
     VAL_SINT = 1,       /* signed int */
     VAL_UINT,           /* unsigned int */
     VAL_SLLONG,         /* signed long long */

@@ -6,9 +6,10 @@
 #include"scanner.h"
 #include"source.h"
 
-char *tok_buf = NULL;//current token pointer (stored in buffer)
-int   tok_bufsize = 0;//no of bytes we allocate to the buffer
-int   tok_bufindex = -1;//current buffer index (tells us where to add the next input character in buffer)
+char *tok_buf = NULL; //current token pointer (stored in buffer)
+int   tok_bufsize = 0; //no of bytes we allocate to the buffer
+int   tok_bufindex = -1; //current buffer index (tells us where to 
+//add the next input character in buffer)
 
 //special token to indicate end of input 
 struct token_s eof_token = {
@@ -32,23 +33,23 @@ void add_to_buf(char c){
 
 //string to struct token_s
 //allocates memory for the token's structure and text
-//ffills int hte structure's member fields
+//fills int hte structure's member fields
 struct token_s *create_token(char *str){
-    struct token_s *tok = malloc(sizeof(struct token_s));
-    if(!tok){
+    struct token_s *tok = malloc(sizeof(struct token_s));//memory allocation to token
+    if(!tok){//if memory could not be allocated properly
         return NULL;
     }
-    memset(tok,0,sizeof(struct token_s));
-    tok->text_len = strlen(str);
+    memset(tok,0,sizeof(struct token_s));//memset that 
+    tok->text_len = strlen(str);//saving the length of the token in it's struct
 
-    char *nstr = malloc(tok->text_len + 1);
+    char *nstr = malloc(tok->text_len + 1);//the actual text that we'll save in token
 
     if(!nstr){
         free(tok);
         return NULL;
     }
     strcpy(nstr,str);
-    tok->text = nstr;
+    tok->text = nstr;//save the text in token
     return tok;
 }
 
@@ -68,11 +69,11 @@ void free_token(struct token_s *tok){
 //which marks the end of input
 struct token_s *tokenize(struct source_s *src){
     int endloop = 0;
-    if(!src || !src-> buffer || !src-> bufsize){
+    if(!src || !src-> buffer || !src-> bufsize){//input ka string hee galat hai
         errno = ENODATA;
         return &eof_token;
     }
-    if(!tok_buf){
+    if(!tok_buf){//merae token exist hee nhi krta hai
         tok_bufsize = 1024;
         tok_buf = malloc(tok_bufsize);
         if(!tok_buf){
@@ -80,31 +81,31 @@ struct token_s *tokenize(struct source_s *src){
             return &eof_token;
         }
     }
-    tok_bufindex = 0;
-    tok_buf[0] = '\0';
-    char nc = next_char(src);
+    tok_bufindex = 0;//struct ko kind of construct kara
+    tok_buf[0] = '\0';//null string bana diya maine apne token ko initially
+    char nc = next_char(src);//maine next_char se string ka pehla char nikala hai
 
-    if(nc == ERRCHAR || nc == EOF){
+    if(nc == ERRCHAR || nc == EOF){//agar toh string hee null tha 
         return &eof_token;
     }
     do{
-        switch(nc){
+        switch(nc){//agar empty space mile toh kuch nhi karne ka
             case ' ':
 
-            case '\t':
+            case '\t'://agar pehle hee tab mil giya, toh kya hee krr skta hain
             if(tok_bufindex>0){
-                endloop = 1;
+                endloop = 1;//yeh aa gya toh matlab ABB BSS
             }
             break;
 
-            case '\n':
-            if(tok_bufindex>0){
+            case '\n'://this is considered as a part of the next token 
+            if(tok_bufindex>0){//this is specific to the implementations of parsers
                 unget_char(src);
             }
             else{
-                add_to_buf(nc);
+                add_to_buf(nc);//agar pehla hee yehi hai, toh mera token hee yehi hai
             }
-            endloop = 1;
+            endloop = 1;//yeh aa gya toh matlab ABB BSS
             break;
 
             default: 
@@ -114,14 +115,14 @@ struct token_s *tokenize(struct source_s *src){
         if(endloop){
             break;
         }
-    } while( (nc=next_char(src)) != EOF );
+    } while( (nc=next_char(src)) != EOF );//take input till you can
 
-    if(tok_bufindex == 0){
+    if(tok_bufindex == 0){//is i did not encounter anything at all then
         return &eof_token;
     }
 
-    if(tok_bufindex >= tok_bufsize){
-        tok_bufindex--;
+    if(tok_bufindex >= tok_bufsize){//why does this not result in the loss of data?
+        tok_bufindex--;//maybe because the last byte is '\n' or something like that
     }
 
     tok_buf[tok_bufindex] = '\0';
@@ -135,4 +136,4 @@ struct token_s *tokenize(struct source_s *src){
 
     tok->src = src;
     return tok;
-}
+} 

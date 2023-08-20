@@ -1,5 +1,6 @@
 #include<unistd.h>
 #include "shell.h"
+#include "parser.h"
 #include "scanner.h"
 #include "node.h"
 #include "source.h"
@@ -8,7 +9,7 @@ struct node_s *parse_simple_command(struct token_s *tok){
     if(!tok){
         return NULL;
     }
-    struct node_s *cmd = new node_s(NODE_COMMAND);
+    struct node_s *cmd = new_node(NODE_COMMAND);
     if(!cmd){
         free_token(tok);
         return NULL;

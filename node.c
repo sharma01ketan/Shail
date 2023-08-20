@@ -9,7 +9,8 @@
 
 //allocating memory to the new node
 //create a new node and set its type field
-struct node_s *node(enum node_type_e type){
+//basically a constructor 
+struct node_s *new_node(enum node_type_e type){
     struct node_s *node = malloc(sizeof(struct node_s));
     if(!node){
         return NULL;
@@ -22,7 +23,7 @@ struct node_s *node(enum node_type_e type){
 //sets a node value to a given string 
 //copies the newly allocated memory space
 //sets the val_type and val.str fields accordingly 
-//
+//this is also self explainatory
 void add_child_node(struct node_s *parent, struct node_s *child){
     if(!parent || !child){
         return;
@@ -43,6 +44,7 @@ void add_child_node(struct node_s *parent, struct node_s *child){
     parent->children++;
 }
 
+//simply allocating memory, but with safety check
 void set_node_val_str(struct node_s *node, char *val){
     node->val_type = VAL_STR;
     if(!val){
